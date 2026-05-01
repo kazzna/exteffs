@@ -1,0 +1,31 @@
+package ext
+
+import ext.Eff.{Single, Stacked}
+import org.scalatest.freespec.AnyFreeSpec
+import types.NaturalTransformation
+
+class EffSpec extends AnyFreeSpec {
+  "Eff" - {
+    "inject" - {
+      "should compose containers" in {
+        import types.Option.monad
+        type R[A] = Stack.of2[[B] =>> Int => B, Option]#R[A]
+
+        val eff1: Eff[R, Int] = Eff.inject(Option(21))
+        val eff2: Eff[R, Int] = Eff.inject((i: Int) => i)
+
+        val eff3 = for {
+          a <- eff1
+          b <- eff2
+        } yield a + b
+
+        val func1ToOption = new NaturalTransformation[[B] =>> Int => B, Option] {
+          override def apply[B](fa: Int => B): Option[B] = Option(fa(21))
+        }
+
+        val eff4 = eff3.restructure(func1ToOption)
+        assert(eff4.extractEff === Option(42))
+      }
+    }
+  }
+}

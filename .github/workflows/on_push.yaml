@@ -1,0 +1,45 @@
+name: On Push
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          distribution: temurin
+          # renovate: datasource=java-version packageName=java
+          java-version: 21.0.10+7.0.LTS
+
+      - uses: sbt/setup-sbt@508b753e53cb6095967669e0911487d2b9bc9f41 # v1.1.22
+
+      - name: Configure GitHub Packages credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.sbt/1.0
+          cat <<EOF > ~/.sbt/1.0/ghpackages.credentials
+          realm=GitHub Package Registry
+          host=maven.pkg.github.com
+          user=${GITHUB_ACTOR}
+          password=${GITHUB_TOKEN}
+          EOF
+          chmod 600 ~/.sbt/1.0/ghpackages.credentials
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run compile and tests
+        shell: bash
+        run: sbt --verbose "+test"
