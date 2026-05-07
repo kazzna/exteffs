@@ -35,6 +35,22 @@ jobs:
 
       - uses: sbt/setup-sbt@508b753e53cb6095967669e0911487d2b9bc9f41 # v1.1.22
 
+      - name: Configure GitHub Packages credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.sbt/1.0
+          cat <<EOF > ~/.sbt/1.0/ghpackages.credentials
+          realm=GitHub Package Registry
+          host=maven.pkg.github.com
+          user=${GITHUB_ACTOR}
+          password=${GITHUB_TOKEN}
+          EOF
+          chmod 600 ~/.sbt/1.0/ghpackages.credentials
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Determine package metadata and SNAPSHOT
         id: pkg_meta
         shell: bash
