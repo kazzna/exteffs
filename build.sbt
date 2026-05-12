@@ -9,7 +9,7 @@ ThisBuild / credentials += Credentials(Path.userHome / ".sbt" / "1.0" / "ghpacka
 lazy val root = (project in file("."))
   .settings(
     name := "exteffs",
-    version := "0.1.0-SNAPSHOT",
+    version := "0.1.0",
     scalacOptions ++= Seq(
       "--deprecation",
       "--feature"
