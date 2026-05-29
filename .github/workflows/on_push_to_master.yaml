@@ -33,7 +33,7 @@ jobs:
           # renovate: datasource=java-version packageName=java
           java-version: 21.0.11+10.0.LTS
 
-      - uses: sbt/setup-sbt@4ed7b7ec4bfa2074fe48554c09e341267397247c # v1.2.0
+      - uses: sbt/setup-sbt@af116cce31c00823d3903ce687f9cda3a4f19f1b # v1.2.1
 
       - name: Configure GitHub Packages credentials
         shell: bash
