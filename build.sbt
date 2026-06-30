@@ -4,7 +4,6 @@ ThisBuild / scalaVersion := "3.8.4"
 ThisBuild / publishTo := sys.env.get("GITHUB_PACKAGES_MAVEN_URL").map { url =>
   "GitHub Package Registry" at url
 }
-ThisBuild / credentials += Credentials(Path.userHome / ".sbt" / "1.0" / "ghpackages.credentials")
 
 lazy val root = (project in file("."))
   .settings(
@@ -14,11 +13,11 @@ lazy val root = (project in file("."))
       "--deprecation",
       "--feature"
     ),
+    credentials += Credentials(Path.userHome / ".sbt" / "1.0" / "ghpackages.credentials"),
+    resolvers += "GitHub Packages kazzna/types" at "https://maven.pkg.github.com/kazzna/types",
     libraryDependencies ++= Seq(
       "jp.kazzna" %% "types" % "0.1.0",
       "org.scalatest" %% "scalatest" % "3.2.20" % "test"
     ),
     Test / testOptions += Tests.Argument("-l", "org.scalatest.tags.Slow")
   )
-
-resolvers += "GitHub Packages kazzna/types" at "https://maven.pkg.github.com/kazzna/types"
