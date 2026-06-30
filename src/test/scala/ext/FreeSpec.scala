@@ -1312,7 +1312,7 @@ class FreeSpec extends AnyFreeSpec {
           val i = (i: Int) => if (f(i)) List(i) else g(i).map(h)
           val j = (i: Int) => if (f(i)) Free.pure[List, Int](i) else Free.lift(g(i)).map(h)
           var list = List(1, 2, 3, 4)
-          var free: Eff[List, Int] = Free.lift(list)
+          var free: Free[List, Int] = Free.lift(list)
           for (_ <- 1 to 5) {
             list = list.flatMap(i)
             free = free.flatMap(j)
