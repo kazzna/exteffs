@@ -306,12 +306,12 @@ object Free {
     }
   }
 
-  implicit def monad[F[_]]: Monad[[A] =>> Free[F, A]] = new Monad[[A] =>> Eff[F, A]] {
-    override def point[A](a: => A): Eff[F, A] = Free.point(a)
-    override def ap[A, B](fa: Eff[F, A])(ff: Eff[F, A => B]): Eff[F, B] = fa.ap(ff)
-    override def map[A, B](fa: Eff[F, A])(f: A => B): Eff[F, B] = fa.map(f)
-    override def map2[A, B, C](fa: Eff[F, A], fb: Eff[F, B])(f: (A, B) => C): Eff[F, C] = fa.map2(fb)(f)
-    override def bind[A, B](fa: Eff[F, A])(f: A => Eff[F, B]): Eff[F, B] = fa.flatMap(f)
-    override def flatten[A](ffa: Eff[F, Eff[F, A]]): Eff[F, A] = ffa.flatMap(identity)
+  implicit def monad[F[_]]: Monad[[A] =>> Free[F, A]] = new Monad[[A] =>> Free[F, A]] {
+    override def point[A](a: => A): Free[F, A] = Free.point(a)
+    override def ap[A, B](fa: Free[F, A])(ff: Free[F, A => B]): Free[F, B] = fa.ap(ff)
+    override def map[A, B](fa: Free[F, A])(f: A => B): Free[F, B] = fa.map(f)
+    override def map2[A, B, C](fa: Free[F, A], fb: Free[F, B])(f: (A, B) => C): Free[F, C] = fa.map2(fb)(f)
+    override def bind[A, B](fa: Free[F, A])(f: A => Free[F, B]): Free[F, B] = fa.flatMap(f)
+    override def flatten[A](ffa: Free[F, Free[F, A]]): Free[F, A] = ffa.flatMap(identity)
   }
 }
