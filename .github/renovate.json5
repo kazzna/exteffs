@@ -16,6 +16,11 @@
   ],
   "packageRules": [
     {
+      "description": "Disable updates for internal types library managed outside this repo",
+      "matchPackageNames": ["jp.kazzna:types_3"],
+      "enabled": false,
+    },
+    {
       "description": "Keep eclipse-temurin JDK images on Java 21 and group as java",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["eclipse-temurin"],
